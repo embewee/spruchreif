@@ -1,0 +1,31 @@
+body {
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+
+}
+
+.spruch {
+	color: #00FF00;
+	font: 150% Verdana;
+}
+
+.autor {
+	color: #FFFF00;
+	font:small-caps 110% Verdana;
+	text-align:right;
+}
+
+#links {
+	margin-left:auto;
+	margin-right:auto;
+	min-width:100px;
+	width:20%;
+}
+
+a {
+	font: 90% Verdana;
+	text-decoration: none;
+}
+
+
