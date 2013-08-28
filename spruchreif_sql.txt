@@ -1,0 +1,20 @@
+CREATE DATABASE spruchreif;
+USE spruchreif;
+
+CREATE TABLE sprueche (spruch TEXT,
+			autor_id INT,
+			kategorie_id INT,
+			erstellt DATE,
+			gezeigt DATE,
+			id INT NOT NULL AUTO_INCREMENT,
+			PRIMARY KEY (id));
+
+CREATE TABLE autoren (	name VARCHAR(50),
+			mail VARCHAR(50),
+			id INT NOT NULL AUTO_INCREMENT,
+			pwd CHAR(32),
+			PRIMARY KEY (id));
+
+CREATE TABLE kategorien(id INT NOT NULL AUTO_INCREMENT,
+			name VARCHAR(50),
+			PRIMARY KEY (id));
