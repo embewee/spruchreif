@@ -6,59 +6,101 @@
 <script language="javascript">
 
 	function register() {
+		email = document.login.email.value;
 		pwd = document.login.pwd.value;
 		pwdval = document.login.pwdval.value;
-		email = document.login.email.value;
 
-		if (isValidEmail(email)) {
-			//ok
+		if(checkInput(email, pwd, pwdval)) {
+			saltedPwd = email + pwd
+			hashedSaltedPwd = MD5(saltedPwd);
+			requestRegistration(email, hashedSaltedPwd);
+			
 		} else {
+			document.write('Nicht registriert');
+		}
+	}
+
+	function checkInput(email, pwd, pwdval) {
+		if (! isValidEmail(email)) {
 			document.write('Inkorrekte Email-Adresse');
-			return;
+			return false;
 		}
 
-		if (pwd == pwdval) {
-			saltedPwd = email + pwd;
-			hash(saltedPwd);
-		} else {
-			document.write('Passwörter stimmen nicht überein');
+		if((pwd == null) || (pwd.length < 6)) {
+			document.write('Das Passwort muss mindestens 6 Zeichen lang sein');
+			return false;
 		}
+		
+		if(pwdval == null) {
+			document.write('Passwort erneut eingeben');
+			return false;
+		}
+
+		if (pwd != pwdval) {
+			document.write('Passwörter stimmen nicht überein');
+			return false;
+		}
+	
+		return true;
 	}
 
 	function isValidEmail(str) {
 		return (str.indexOf(".") > 2) && (str.indexOf("@") > 0);
 	}
 
-  function hash(saltedPwd) {
-	document.write(saltedPwd + '\n');
+	function requestRegistration(email, pwd) {
+		var ajax = getRequest();
+		
+		ajax.onreadystatechange = function(){
+			if(ajax.readyState == 4){
+				document.getElementById('output').innerHTML = ajax.responseText; //refers to span-element
+			}
+		}
+		
+		ajax.open("GET", "register.php?name=" + email + "&email=" + email + "&pwd=" + pwd, true); //TODO: PUT!
+		ajax.send(null);
+	}
 
-	hashedSaltedPwd = MD5(saltedPwd);
+	function getRequest() {
+		var req = false;
+		try{
+		    // most browsers
+		    req = new XMLHttpRequest();
+		} catch (e){
+		    // IE
+		    try{
+		        req = new ActiveXObject("Msxml2.XMLHTTP");
+		    } catch (e) {
+		        // try an older version
+		        try{
+		            req = new ActiveXObject("Microsoft.XMLHTTP");
+		        } catch (e){
+		            return false;
+		        }
+		    }
+		}
+		return req;
+	}
 
-	document.write(hashedSaltedPwd);
-  }
 </script>
-
-
-
-<?php
-	require 'hash.php';
-?>
 
 </head>
 
 <body>
 
 <form name="login" action="registrieren.php" method="POST">
-	<label for="email">Email:</label>	
+	<label for="email">Email=Benutzername:</label>	
 	<input type="text" name="email" id="email"/>
 	<label for="pwd">Kennwort:</label>	
-	<input type="text" name="pwd" id="pwd"/>
+	<input type="password" name="pwd" id="pwd"/>
 	<label for="pwdval">Kennwort erneut eingeben:</label>	
-	<input type="text" name="pwdval" id="pwdval"/>
+	<input type="password" name="pwdval" id="pwdval"/>
 	<input type="submit" onClick="register(); return false;" value="Registrieren"/> <!-- return false: danach wird das submit noch ausgeführt ~! -->
 </form>
 
 <a href="anmelden.php">Anmelden</a> 
+
+<span id="output"></span>
 
 </body>
 </html>
