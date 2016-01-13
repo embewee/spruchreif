@@ -1,5 +1,4 @@
 spruchreif
 ==========
 
-Teil des HardCode-Projekts
-Boah, wie hardcore!!!
+Some experiments with PHP. 
